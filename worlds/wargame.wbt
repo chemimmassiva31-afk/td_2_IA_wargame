@@ -3,14 +3,14 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.33862004492393283 0.22314828464971745 0.914079486824643 2.057268912574331
-  position 1.9428712869615636 -3.9823826303267493 4.017063145909788
+  orientation -0.402739799944791 0.309063781126174 0.8615568656429023 1.9732295131390871
+  position 1.5466353791391252 -3.904977949865707 4.312220689015906
 }
 TexturedBackground {
 }
@@ -39,17 +39,17 @@ RectangleArena {
   }
 }
 E-puck {
-  hidden position_0_0 47211.26944802174
-  hidden position_0_1 49929.967197317404
-  hidden linearVelocity_0 2.2303717270873717e-07 1.6612014186182518e-07 -2.9875953562926346e-13
-  hidden angularVelocity_0 -4.489772943529377e-06 6.0278236808143456e-06 9.159120410887816e-09
-  hidden rotation_1 0 -1 0 0.5849501256731245
-  hidden linearVelocity_1 1.344513251378855e-07 9.989291296506342e-08 1.6110729937780392e-07
-  hidden angularVelocity_1 -1.9847373560856096 -1.4757331678686962 -1.6979485400247616
-  hidden rotation_2 0 1 0 3.7767464684103524
-  hidden linearVelocity_2 3.116225294367405e-07 2.3234700488986663e-07 -1.6110812192801396e-07
-  hidden angularVelocity_2 -1.9847373621608964 -1.4757331674791712 -1.697948533261902
-  translation -0.9417148744262508 0.3458301941151993 0.037909970594334624
-  rotation 0.8000177148430304 -0.13279580557311604 -0.585095658811038 -2.116120087488788
+  hidden position_0_0 2633.107545901515
+  hidden position_0_1 3295.3005952566914
+  hidden linearVelocity_0 -1.0040154830785279e-07 -1.1181162663298494e-07 -1.3720343962593992e-07
+  hidden angularVelocity_0 -1.337937316983842e-05 1.344854349468771e-05 1.738552750958462e-06
+  hidden rotation_1 0 -1 0 5.830283113911225
+  hidden linearVelocity_1 -2.3059117933154968e-07 -2.718964473109555e-07 9.922959689491356e-08
+  hidden angularVelocity_1 -2.451879354759517 1.1351853866538957 -1.3037382315600388
+  hidden rotation_2 0 1 0 2.911494294588081
+  hidden linearVelocity_2 1.075293784569312e-07 1.0433953497955105e-07 -2.0906329312173563e-07
+  hidden angularVelocity_2 -2.4518793564863937 1.1351853921936446 -1.3037382234889079
+  translation -0.3390271493351894 0.9738612698909763 0.0318486644542968
+  rotation 0.11329062490850714 -0.6650276465272633 0.7381757674580284 1.6855665584813906
   controller "wargame_controller"
 }
