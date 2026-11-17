@@ -1,42 +1,28 @@
+def norm(raw):
+    return min(1.0, max(0.0, (raw - RAW_MIN) / (RAW_MAX - RAW_MIN)))
 
-from controller import Robot
 
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 
-# Initialisation des capteurs
-ps = {}
+ps = {f"ps{i}": robot.getDevice(f"ps{i}") for i in range(8)}
+for s in ps.values():
+    s.enable(timestep)
 
-for nom in ["ps1", "ps2", "ps5", "ps6"]:
-    ps[nom] = robot.getDevice(nom)
-    ps[nom].enable(timestep)
-
-# Initialisation des moteurs
 left = robot.getDevice("left wheel motor")
 right = robot.getDevice("right wheel motor")
+for m in (left, right):
+    m.setPosition(float("inf"))
+    m.setVelocity(0.0)
 
-left.setPosition(float("inf"))
-right.setPosition(float("inf"))
-
-left.setVelocity(0)
-right.setVelocity(0)
-
+t = 0
 while robot.step(timestep) != -1:
+    raw = {nom: s.getValue() for nom, s in ps.items()}
+    p = {nom: norm(v) for nom, v in raw.items()}           # proximités normalisées
+    if t % 15 == 0:
+        print({nom: round(v) for nom, v in raw.items()}, "->",
+              {nom: round(v, 2) for nom, v in p.items()})
 
-    # Lecture des capteurs
-    distance_droite = max(
-        ps["ps1"].getValue(),
-        ps["ps2"].getValue()
-    )
-
-    distance_gauche = max(
-        ps["ps5"].getValue(),
-        ps["ps6"].getValue()
-    )
-
-    print("Droite :", distance_droite,
-          "Gauche :", distance_gauche)
-
-    
-    left.setVelocity(2.0)
-    right.setVelocity(2.0)
+    left.setVelocity(0.0)                        
+    right.setVelocity(0.0)
+    t += 1
