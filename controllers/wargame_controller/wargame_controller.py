@@ -60,6 +60,52 @@ def fuzzifier(p_lat, p_avd, p_ard, p_avg, p_front):
     return E, AL, F
 
 
+OUT_ANGLE = {
+    "DROITE_FORT": (-45, -45, -45, -20),
+    "DROITE":      (-35, -18, -18, 0),
+    "TOUT_DROIT":  (-10, 0, 0, 10),
+    "GAUCHE":      (0, 18, 18, 35),
+    "GAUCHE_FORT": (20, 45, 45, 45),
+}
+
+TABLE_ANGLE = {
+    ("TROP_PROCHE", "DIVERGE"):   "TOUT_DROIT",
+    ("TROP_PROCHE", "PARALLELE"): "GAUCHE",
+    ("TROP_PROCHE", "CONVERGE"):  "GAUCHE_FORT",
+    ("BONNE",       "DIVERGE"):   "DROITE",
+    ("BONNE",       "PARALLELE"): "TOUT_DROIT",
+    ("BONNE",       "CONVERGE"):  "GAUCHE",
+    ("TROP_LOIN",   "DIVERGE"):   "DROITE_FORT",
+    ("TROP_LOIN",   "PARALLELE"): "DROITE",
+    ("TROP_LOIN",   "CONVERGE"):  "TOUT_DROIT",
+}
+
+
+def regles_angle(E, AL, F):
+    regles = []
+    for (e, a), sortie in TABLE_ANGLE.items():
+        degre = min(E[e], AL[a], F["LIBRE"])
+        regles.append((sortie, degre))
+    regles.append(("GAUCHE_FORT", F["PROCHE"]))
+    return regles
+
+
+def centroide(regles, termes, lo, hi, defaut=0.0, n=201):
+    num = 0.0
+    den = 0.0
+    for i in range(n):
+        u = lo + (hi - lo) * i / (n - 1)
+        mu = 0.0
+        for sortie, degre in regles:
+            a, b, c, d = termes[sortie]
+            mu = max(mu, min(degre, trap(u, a, b, c, d)))
+        num += u * mu
+        den += mu
+    if den < 1e-9:
+        return defaut
+    return num / den
+
+
 def arrondi(dico):
     return {mot: round(valeur, 2) for mot, valeur in dico.items()}
 
@@ -93,8 +139,15 @@ while robot.step(timestep) != -1:
 
     E, AL, F = fuzzifier(p["ps2"], p["ps1"], p["ps3"], p["ps6"], max(p["ps0"], p["ps7"]))
 
+    regles = regles_angle(E, AL, F)
+    angle = centroide(regles, OUT_ANGLE, -45, 45, 0.0)
+
     if t % 15 == 0:
-        print("E =", arrondi(E), "| AL =", arrondi(AL), "| F =", arrondi(F))
+        actives = {}
+        for sortie, degre in regles:
+            if degre > 0.05:
+                actives[sortie] = max(actives.get(sortie, 0.0), round(degre, 2))
+        print("angle =", round(angle, 1), "| regles actives :", actives)
 
     left.setVelocity(0.0)
     right.setVelocity(0.0)
