@@ -68,6 +68,13 @@ OUT_ANGLE = {
     "GAUCHE_FORT": (20, 45, 45, 45),
 }
 
+OUT_SPEED = {
+    "ARRET":  (0.0, 0.0, 0.0, 0.25),
+    "LENT":   (0.0, 0.2, 0.2, 0.5),
+    "MOYEN":  (0.2, 0.5, 0.5, 0.8),
+    "RAPIDE": (0.5, 1.0, 1.0, 1.0),
+}
+
 TABLE_ANGLE = {
     ("TROP_PROCHE", "DIVERGE"):   "TOUT_DROIT",
     ("TROP_PROCHE", "PARALLELE"): "GAUCHE",
@@ -88,6 +95,16 @@ def regles_angle(E, AL, F):
         regles.append((sortie, degre))
     regles.append(("GAUCHE_FORT", F["PROCHE"]))
     return regles
+
+
+def regles_vitesse(E, AL, F):
+    return [
+        ("ARRET",  F["PROCHE"]),
+        ("LENT",   min(F["LIBRE"], E["TROP_PROCHE"])),
+        ("MOYEN",  min(F["LIBRE"], E["TROP_LOIN"])),
+        ("RAPIDE", min(F["LIBRE"], E["BONNE"], AL["PARALLELE"])),
+        ("MOYEN",  min(F["LIBRE"], E["BONNE"], max(AL["CONVERGE"], AL["DIVERGE"]))),
+    ]
 
 
 def centroide(regles, termes, lo, hi, defaut=0.0, n=201):
@@ -139,15 +156,17 @@ while robot.step(timestep) != -1:
 
     E, AL, F = fuzzifier(p["ps2"], p["ps1"], p["ps3"], p["ps6"], max(p["ps0"], p["ps7"]))
 
-    regles = regles_angle(E, AL, F)
-    angle = centroide(regles, OUT_ANGLE, -45, 45, 0.0)
+    angle = centroide(regles_angle(E, AL, F), OUT_ANGLE, -45, 45, 0.0)
+
+    regles = regles_vitesse(E, AL, F)
+    vitesse = centroide(regles, OUT_SPEED, 0, 1, 0.3)
 
     if t % 15 == 0:
         actives = {}
         for sortie, degre in regles:
             if degre > 0.05:
                 actives[sortie] = max(actives.get(sortie, 0.0), round(degre, 2))
-        print("angle =", round(angle, 1), "| regles actives :", actives)
+        print("angle =", round(angle, 1), "| vitesse =", round(vitesse, 2), "| regles actives :", actives)
 
     left.setVelocity(0.0)
     right.setVelocity(0.0)
