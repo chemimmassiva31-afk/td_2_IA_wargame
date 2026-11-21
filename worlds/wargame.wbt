@@ -1,0 +1,55 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.402739799944791 0.309063781126174 0.8615568656429023 1.9732295131390871
+  position 1.5466353791391252 -3.904977949865707 4.312220689015906
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2 2
+  floorTileSize 0.6 0.6
+}
+RectangleArena {
+  translation -0.075 0.4 0.001
+  name "rectangle arena(1)"
+  floorSize 0.45 1.2
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+}
+RectangleArena {
+  translation 0.34 0.18 0.001
+  rotation 0 1 0 4.692820414042842e-06
+  name "rectangle arena(2)"
+  floorSize 0.35 0.75
+  floorTileSize 1 1
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+}
+E-puck {
+  hidden position_0_0 2633.107545901515
+  hidden position_0_1 3295.3005952566914
+  hidden linearVelocity_0 -1.0040154830785279e-07 -1.1181162663298494e-07 -1.3720343962593992e-07
+  hidden angularVelocity_0 -1.337937316983842e-05 1.344854349468771e-05 1.738552750958462e-06
+  hidden rotation_1 0 -1 0 5.830283113911225
+  hidden linearVelocity_1 -2.3059117933154968e-07 -2.718964473109555e-07 9.922959689491356e-08
+  hidden angularVelocity_1 -2.451879354759517 1.1351853866538957 -1.3037382315600388
+  hidden rotation_2 0 1 0 2.911494294588081
+  hidden linearVelocity_2 1.075293784569312e-07 1.0433953497955105e-07 -2.0906329312173563e-07
+  hidden angularVelocity_2 -2.4518793564863937 1.1351853921936446 -1.3037382234889079
+  translation -0.3390271493351894 0.9738612698909763 0.0318486644542968
+  rotation 0.11329062490850714 -0.6650276465272633 0.7381757674580284 1.6855665584813906
+  controller "wargame_controller"
+}
