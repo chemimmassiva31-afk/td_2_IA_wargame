@@ -2,7 +2,7 @@ from controller import Robot
 
 WALL_SIDE = "right"
 MAX_SPEED = 6.28
-CRUISE = 0.6
+CRUISE = 0.45
 TURN = 0.5
 RAW_MIN = 80.0
 RAW_MAX = 600.0
@@ -40,13 +40,13 @@ IN = {
         "CONVERGE":  (0.15, 0.32, 1.00, 1.00),
     },
     "F": {
-        "LIBRE":  (0.00, 0.00, 0.05, 0.25),
-        "PROCHE": (0.10, 0.40, 1.00, 1.00),
+        "LIBRE":  (0.00, 0.00, 0.03, 0.18),
+        "PROCHE": (0.06, 0.30, 1.00, 1.00),
     },
 }
 
 
-def fuzzifier(p_lat, p_avd, p_ard, p_avg, p_front):
+def fuzzifier(p_lat, p_avd, p_ard, p_avg):
     E = {}
     for mot, (a, b, c, d) in IN["E"].items():
         E[mot] = trap(p_lat, a, b, c, d)
@@ -56,7 +56,7 @@ def fuzzifier(p_lat, p_avd, p_ard, p_avg, p_front):
     for mot, (a, b, c, d) in IN["AL"].items():
         AL[mot] = trap(alignement, a, b, c, d)
 
-    devant = max(p_front, 0.5 * p_avd, p_avg)
+    devant = max(0.5 * p_avd, p_avg)
     F = {}
     for mot, (a, b, c, d) in IN["F"].items():
         F[mot] = trap(devant, a, b, c, d)
@@ -144,7 +144,7 @@ robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 
 ps = {}
-for i in range(8):
+for i in range(1, 7):
     nom = "ps" + str(i)
     ps[nom] = robot.getDevice(nom)
     ps[nom].enable(timestep)
@@ -185,7 +185,7 @@ while robot.step(timestep) != -1:
     for nom in raw:
         p[nom] = norm(raw[nom])
 
-    E, AL, F = fuzzifier(p[LAT], p[AVD], p[ARD], p[AVG], max(p["ps0"], p["ps7"]))
+    E, AL, F = fuzzifier(p[LAT], p[AVD], p[ARD], p[AVG])
 
     angle = centroide(regles_angle(E, AL, F), OUT_ANGLE, -45, 45, 0.0)
     vitesse = centroide(regles_vitesse(E, AL, F), OUT_SPEED, 0, 1, 0.3)
